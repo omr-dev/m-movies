@@ -1,4 +1,3 @@
-import * as genresAPI from "./fakeGenreService";
 
 export type Movie = {
     _id: string;
