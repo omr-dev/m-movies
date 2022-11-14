@@ -7,6 +7,7 @@ export type Movie = {
     numberInStock: number;
     dailyRentalRate: number;
     publishDate?: string;
+    isLiked?:boolean;
 }
 const movies: Movie[] = [
     {
@@ -98,7 +99,7 @@ export function getMovies() {
 //     return movieInDb;
 // }
 
-export function deleteMovie({movies,id}:{movies:Movie[],id:string}) {
+export function deleteMovie({movies,id}:{movies:Movie[],id:string}):Movie[] {
     const updatedMovies=[...movies];
     let movieInDb = movies.find(m => m._id === id);
     if(movieInDb){
