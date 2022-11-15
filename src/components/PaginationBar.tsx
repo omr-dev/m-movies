@@ -6,28 +6,26 @@ type propsPaginationBar={
     pageSize:number;
     itemsCount:number;
 }
+const calculatePageCount=(itemsCount:number,pageSize:number)=>{
+    return Math.ceil(itemsCount / pageSize);
 
+}
 const PaginationBar = ({activePage, setActivePage, pageSize,itemsCount}:propsPaginationBar) => {
     const firstUpdate=useRef(true);
-    const [pageCount,setPageCount]=useState(Math.ceil(itemsCount / pageSize))
+    const [pageCount,setPageCount]=useState(calculatePageCount(itemsCount,pageSize))
 useEffect(()=>{
     setPageCount(Math.ceil(itemsCount / 4));
 },[itemsCount])
 
     useEffect(()=>{
-        console.log("pageCount useEffect i calisti");
         if(!firstUpdate.current)
-        setActivePage(activePage-1);
+        setActivePage(1);
         if(firstUpdate.current){
             firstUpdate.current=false;
             return;
         }
     },[pageCount])
-    //////////////////////////
 
-    // let active = 1;
-    // const pageSize = 4;
-    // const pageCount=Math.ceil(movies.length / pageSize);
     let items = [];
     for (let number = 1; number <= pageCount; number++) {
         items.push(
@@ -39,12 +37,7 @@ useEffect(()=>{
         );
     }
 
-    // const paginationBasic = (
-    //
-    // );
 
-    //render(paginationBasic);
-    //////////////////////////////
     return (
         <div>
             {pageCount>1&&  <Pagination>{items}</Pagination>}

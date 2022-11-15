@@ -1,13 +1,18 @@
 import {ListGroup} from 'react-bootstrap';
-import {getGenres} from '../services/fakeGenreService';
+import {GenreName, getGenres} from '../services/fakeGenreService';
+type propsGenresList={
+    activeGenre:GenreName|null;
+    setActiveGenre:(genre:GenreName|null)=>void;
+}
 
-const GenresList=()=>{
-    const genres=getGenres();
+const GenresList=({activeGenre,setActiveGenre}:propsGenresList)=>{
+
     return (<div>
         <ListGroup>
-            <ListGroup.Item>All Genres</ListGroup.Item>
-            {genres.map((genre,index)=>{
-            return <ListGroup.Item key={index}>{genre.name}</ListGroup.Item>
+            <ListGroup.Item active={activeGenre===null} onClick={()=>{setActiveGenre(null)}} style={{cursor:"pointer"}}>All Genres</ListGroup.Item>
+
+            {getGenres().map((genre,index)=>{
+            return <ListGroup.Item key={index} active={activeGenre===genre.name} onClick={()=>{setActiveGenre(genre.name)}} style={{cursor:"pointer"}}>{genre.name}</ListGroup.Item>
             })}
 
 
