@@ -1,6 +1,7 @@
 import {LikeButton} from './LikeButton';
 import {Button} from 'react-bootstrap';
 import {Movie} from '../services/fakeMovieService';
+import {Link} from 'react-router-dom';
 type PropsMoviesTableBody={
     filteredMovies:Movie[]|null;
     activePage:number;
@@ -18,7 +19,7 @@ const MoviesTableBody=({filteredMovies, activePage,PAGE_SIZE,handleLike,handleDe
 
         return (<tr key={movie._id}>
 
-            <td>{movie.title}</td>
+            <td><Link to={`movies/${movie._id}`}>{movie.title}</Link></td>
             <td>{movie.genre.name}</td>
             <td>{movie.numberInStock}</td>
             <td>{movie.dailyRentalRate}</td>
