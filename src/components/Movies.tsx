@@ -1,6 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
 import Table from 'react-bootstrap/Table';
-import {Button} from 'react-bootstrap';
 import Alert from 'react-bootstrap/Alert';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faSortDown} from '@fortawesome/free-solid-svg-icons';
@@ -8,10 +7,11 @@ import{faSortUp} from '@fortawesome/free-solid-svg-icons';
 import {deleteMovie, getMovies, Movie} from '../services/fakeMovieService';
 
 
-import {LikeButton} from './LikeButton';
 import PaginationBar from './PaginationBar';
 import {GenreName} from '../services/fakeGenreService';
-export type SortColumn ="title"|"genre"|"stock"|"rate";
+import MoviesTableHeader from './MoviesTableHeader';
+import MoviesTableBody from './MoviesTableBody';
+export enum SortColumn {title="title",genre="genre",stock="stock",rate="rate"}
 
 type propsMovies = {
     activeGenre: GenreName|null;
@@ -66,16 +66,7 @@ export const Movies = ({activeGenre,sortColumn, setSortColumn,isAscSort,setIsAsc
 useEffect(()=>{
     if(filteredMovies)
     setFilteredMovies(getSortedMovies(filteredMovies,sortColumn,isAscSort));
-    // if (!refSortFirstUpdate.current && filteredMovies) {
-    //
-    //     setFilteredMovies(getSortedMovies(filteredMovies,sortColumn,isAscSort));
-    //     }
-    //
-    //
-    // if (refSortFirstUpdate.current) {
-    //     refSortFirstUpdate.current = false;
-    //     return;
-    // }
+
 },[sortColumn,isAscSort])
 
     const handleDelete = (id: string) => {
@@ -111,9 +102,10 @@ useEffect(()=>{
     }
 
 const handleSort=(newSortColumn:SortColumn)=>{
-    console.log("handle sort calisti : ", newSortColumn,sortColumn,isAscSort);
     if(newSortColumn===sortColumn){
         setIsAscSort(!isAscSort);
+    }else{
+        setIsAscSort(false);
     }
     setSortColumn(newSortColumn);
 
@@ -191,41 +183,14 @@ const getSortedMovies=(unsortedMovies:Movie[],sortingCol:SortColumn,isAscending:
         <>
             <Alert key="info" variant={movies ? "info" : "danger"}>
                 <h2>There are {movies ? movies.length : "no"} movies.</h2>
-                <h4>{"asc: " + isAscSort+" "+sortColumn}</h4>
+
             </Alert>
 
 
             <Table striped hover>
-                <thead>
-                <tr>
-                    <th onClick={()=>handleSort("title")}>Title{getSortIcon("title")}</th>
-                    <th onClick={()=>handleSort("genre")}>Genre{getSortIcon("genre")}</th>
-                    <th onClick={()=>handleSort("stock")}>Stock{getSortIcon("stock")}</th>
-                    <th onClick={()=>handleSort("rate")}>Rate{getSortIcon("rate")}</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {filteredMovies?.map((movie, index) => {
-                    if (index >= activePage * PAGE_SIZE || index <= (activePage - 1) * PAGE_SIZE - 1) {
-                        return null;
-                    }
+                <MoviesTableHeader handleSort={handleSort} getSortIcon={getSortIcon}/>
 
-                    return (<tr key={movie._id}>
-
-                        <td>{movie.title}</td>
-                        <td>{movie.genre.name}</td>
-                        <td>{movie.numberInStock}</td>
-                        <td>{movie.dailyRentalRate}</td>
-                        <td><LikeButton movie={movie} handleLike={handleLike}/></td>
-                        <td>
-
-                            <Button variant="danger" onClick={() => handleDelete(movie._id)}>Delete</Button></td>
-                    </tr>);
-                })}
-
-
-                </tbody>
+                <MoviesTableBody filteredMovies={filteredMovies} activePage={activePage} PAGE_SIZE={PAGE_SIZE} handleDelete={handleDelete} handleLike={handleLike}/>
             </Table>
             {filteredMovies && <PaginationBar activePage={activePage} pageSize={PAGE_SIZE} itemsCount={filteredMovies?.length} setActivePage={setActivePage}/>}
 
