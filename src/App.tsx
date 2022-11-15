@@ -1,12 +1,11 @@
 import './App.scss';
-// import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-// import {faCoffee} from '@fortawesome/free-solid-svg-icons';
 import {Col, Container, Row} from 'react-bootstrap';
 
 import {Movies, SortColumn} from './components/Movies';
 import GenresList from './components/GenresList';
 import {useState} from 'react';
 import {GenreName} from './services/fakeGenreService';
+import NavbarComponent from './components/NavbarComponent';
 
 
 function App() {
@@ -18,6 +17,10 @@ function App() {
 
   return (
     <div className="App">
+
+
+
+<NavbarComponent/>
 <Container>
     <Row className="mt-5">
         <Col md={2}>
